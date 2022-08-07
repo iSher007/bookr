@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% load explode_filter %}
+{% block title %}
+    Custom Filter Example
+{% endblock %}
+{% block content %}
+    {{ names|explode:"," }}
+{% endblock %}

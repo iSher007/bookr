@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}
+    Simple Tag Template Example
+{% endblock %}
+
+{% block content %}
+    {% load simple_tag inclusion_tag %}
+    {% greet_user "Hey" %}
+    <br/>
+    <span class="message">You have read the following books till date</span>
+    <p>books</p>
+    {% book_list books %}
+{% endblock %}
