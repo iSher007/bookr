@@ -4,6 +4,7 @@ from django.db import models
 
 class Publisher(models.Model):
     """A company that publishes books."""
+
     class Meta:
         app_label = 'reviews'
 
@@ -18,6 +19,7 @@ class Publisher(models.Model):
 
 class Book(models.Model):
     """A published book."""
+
     class Meta:
         app_label = 'reviews'
 
@@ -44,6 +46,7 @@ class Book(models.Model):
 
 class Contributor(models.Model):
     """A contributor to a Book, e.g. author, editor, co-author."""
+
     class Meta:
         app_label = 'reviews'
 
@@ -59,6 +62,9 @@ class Contributor(models.Model):
         initials = ''.join([name[0] for name
                             in self.first_names.split(' ')])
         return "{}, {}".format(self.last_names, initials)
+
+    def number_contributions(self):
+        return self.bookcontributor_set.count()
 
     def __str__(self):
         return self.first_names

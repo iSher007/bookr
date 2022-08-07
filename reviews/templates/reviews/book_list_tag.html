@@ -1,0 +1,11 @@
+{% if book_list %}
+    <p>Books Read:</p>
+    <ul>
+        {% for book in book_list %}
+            <li>{{ book }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>You didn't read any book.</p>
+    <a href="{% url 'book_list' %}">You can start right now by going to this link.</a>
+{% endif %}

@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-wfl&z836h0uq^fqdkzf)q&*fy@6thdg26u!7w-v(09orn8lvx(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1']
 
 
 # Application definition
@@ -40,6 +40,10 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'reviews.apps.ReviewsConfig',
     'bookr_admin.apps.BookrAdminConfig',
+    'filter_demo.apps.FilterDemoConfig',
+    'book_management.apps.BookManagementConfig',
+    'rest_framework',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
