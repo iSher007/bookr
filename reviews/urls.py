@@ -21,6 +21,7 @@ urlpatterns = [
     path('accounts/profile/', profile, name='profile'),
     path('api/', include((router.urls, 'api'))),
     path('api/login/', api_views.Login.as_view(), name='login'),
+    path('accounts/profile/read_books', read_books, name='read_books'),
     # path('api/all_books/', api_views.all_books.as_view(), name='all_books'),
     # path('api/contributor/', api_views.ContributorView.as_view(), name='contributor_api'),
 ]

@@ -1,13 +1,18 @@
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.core.exceptions import PermissionDenied
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 # from django.views.decorators.cache import cache_page
 
 from .forms import *
 from .models import *
-from .utils import average_rating
+from .utils import average_rating, get_books_read_by_month, get_books_read_by_user
 from django.utils import timezone
+import plotly.graph_objs as graphs
+from plotly.offline import plot
+import xlsxwriter
+from io import BytesIO
 
 
 # @cache_page(60)
@@ -164,4 +169,40 @@ def review_edit(request, book_pk, review_pk=None):
 
 @login_required()
 def profile(request):
-    return render(request, 'profile.html')
+    user = request.user
+    permissions = user.get_all_permissions()
+    books_read_by_month = get_books_read_by_month(user.username)
+    months = [i + 1 for i in range(12)]
+    books_read = [0 for _ in range(12)]
+
+    for num_books_read in books_read_by_month:
+        list_index = num_books_read['date_created__month'] - 1
+        books_read[list_index] = num_books_read['book_count']
+    figure = graphs.Figure()
+    scatter = graphs.Scatter(x=months, y=books_read)
+    figure.add_trace(scatter)
+    figure.update_layout(xaxis_title="Month", yaxis_title="No. of books read")
+    plot_html = plot(figure, output_type='div')
+    return render(request, 'profile.html', {'user': user, 'permissions': permissions, 'books_read_plot': plot_html})
+
+
+@login_required()
+def read_books(request):
+    user = request.user
+    books = get_books_read_by_user(user)
+    temple_file = BytesIO()
+
+    workbook = xlsxwriter.Workbook(temple_file)
+    worksheet = workbook.add_worksheet()
+    data = []
+    for book in books:
+        data.append([book.book.title, str(book.date_created)])
+    for row in range(len(data)):
+        for col in range(len(data[row])):
+            worksheet.write(row, col, data[row][col])
+    workbook.close()
+    data_to_download = temple_file.getvalue()
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=reading_history.xlsx'
+    response.write(data_to_download)
+    return response
