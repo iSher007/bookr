@@ -48,7 +48,8 @@
             <p>Search History</p>
             <p>
                 {% for search_in, search in request.session.search_history %}
-                    <a href="{% url 'book_search' %}?search={{ search|urlencode }}&search_in={{ search_in }}">{{ search }} ({{ search_in }})</a><br>
+                    <a href="{% url 'book_search' %}?search={{ search|urlencode }}&search_in={{ search_in }}">{{ search }}
+                        ({{ search_in }})</a><br>
                 {% empty %}
                     No recently searched books found.
                 {% endfor %}
@@ -56,6 +57,12 @@
         </div>
     </div>
 
+    <a href="{% url 'read_books' %}">Download Reading History as Excell File.</a>
+
     {% load profile_tags %}
     {% book_list user.username %}
+
+    {% autoescape off %}
+        {{ books_read_plot }}
+    {% endautoescape %}
 {% endblock %}
