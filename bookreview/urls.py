@@ -21,6 +21,7 @@ from bookreview import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('reviews.urls')),
+    path('test/', include('bookr_test.urls')),
     path('accounts/', include(('django.contrib.auth.urls', 'auth'), namespace='accounts')),
     path('filter_demo/', include('filter_demo.urls')),
     path('book_management/', include('book_management.urls')),
