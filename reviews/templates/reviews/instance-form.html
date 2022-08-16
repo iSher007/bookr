@@ -1,4 +1,5 @@
 {% extends 'reviews/base.html' %}
+{% load crispy_forms_tags %}
 {% block title %}
     {% if instance %}
         Editing {{ model_type }} {{ instance }}
@@ -8,24 +9,18 @@
 {% endblock %}
 
 {% block content %}
-        <h2>
-            {% if instance %}
-                Editing {{ model_type }} <em>{{ instance }}</em>
-            {% else %}
-                New {{ model_type }}
-            {% endif %}
-        </h2>
-        {% if related_instance and related_model_type %}
-            <p>For {{ related_model_type }} <em>{{ related_instance.title }}</em></p>
+    <h2>
+        {% if instance %}
+            Editing {{ model_type }} <em>{{ instance }}</em>
+        {% else %}
+            New {{ model_type }}
         {% endif %}
+    </h2>
+    {% if related_instance and related_model_type %}
+        <p>For {{ related_model_type }} <em>{{ related_instance.title }}</em></p>
+    {% endif %}
     {% for message in messages %}
         <p><em>{{ message.level_tag|title }}:</em> {{ message }}</p>
     {% endfor %}
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">
-            {% if instance %}Save{% else %}Create{% endif %}
-        </button>
-    </form>
+    {% crispy form %}
 {% endblock %}
