@@ -17,7 +17,12 @@ from io import BytesIO
 
 # @cache_page(60)
 def index(request):
-    return render(request, "base.html")
+    viewed_books = [Book.objects.get(id=book_id[0]) for book_id in request.session.get('viewed_books', [])]
+
+    context = {
+        "viewed_books": viewed_books,
+    }
+    return render(request, "reviews/base.html", context)
 
 
 def book_search(request):
@@ -206,3 +211,7 @@ def read_books(request):
     response['Content-Disposition'] = 'attachment; filename=reading_history.xlsx'
     response.write(data_to_download)
     return response
+
+
+def react_example(request):
+    return render(request, "react_example.html")
